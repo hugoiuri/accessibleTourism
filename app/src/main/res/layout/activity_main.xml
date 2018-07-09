@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
+    <in.goodiebag.carouselpicker.CarouselPicker
+        android:id="@+id/carouselPicker1"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="#DDD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:items_visible="three"
+       />
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="0dp"

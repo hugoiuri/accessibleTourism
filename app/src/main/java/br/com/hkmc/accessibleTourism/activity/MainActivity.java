@@ -8,9 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.hkmc.accessibleTourism.R;
+import in.goodiebag.carouselpicker.CarouselPicker;
 
 public class MainActivity extends AppCompatActivity {
+
+    CarouselPicker carouselPicker1;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -41,6 +47,14 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.mnHomeId);
+
+        carouselPicker1 = (CarouselPicker) findViewById(R.id.carouselPicker1);
+        List<CarouselPicker.PickerItem> itemsImages = new ArrayList<>();
+        itemsImages.add(new CarouselPicker.DrawableItem(R.mipmap.ic_launcher));
+        itemsImages.add(new CarouselPicker.DrawableItem(R.mipmap.ic_launcher_round));
+        itemsImages.add(new CarouselPicker.DrawableItem(R.mipmap.ic_launcher));
+        CarouselPicker.CarouselViewAdapter imageAdapter = new CarouselPicker.CarouselViewAdapter(this, itemsImages, 0);
+        carouselPicker1.setAdapter(imageAdapter);
     }
 
 }
