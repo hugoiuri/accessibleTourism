@@ -9,4 +9,6 @@
     <string name="title_featured_packages">Pacotes em destaque</string>
     <string name="title_top_packages">Pacotes mais comprados</string>
     <string name="title_activity_flights">Resultados da Busca</string>
+    <string name="btn_editar">Editar</string>
+    <string name="text_my_packages">Meus Pacotes</string>
 </resources>
