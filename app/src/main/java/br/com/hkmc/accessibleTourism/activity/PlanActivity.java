@@ -14,6 +14,9 @@ import android.widget.TextView;
 import android.view.View;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +36,7 @@ public class PlanActivity extends AppCompatActivity {
     private TextView txtValor;
     private TextView txtReturnsTime;
     private TextView txtGoingTime;
+    private TextView txtCurrency;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -76,6 +80,7 @@ public class PlanActivity extends AppCompatActivity {
         txtValor = findViewById(R.id.txtValorId);
         txtGoingTime = findViewById(R.id.txtDepartureHourId);
         txtReturnsTime = findViewById(R.id.txtArrivalHourId);
+        txtCurrency = findViewById(R.id.txtCurrencyId);
     }
     // PROCEDIMENTO PARA EXECUTAR O ONCLICK DO BOTÃO
     public void onClickFind(View view){
@@ -86,13 +91,13 @@ public class PlanActivity extends AppCompatActivity {
         String ReturnsDate = edtReturnsDate.getText().toString();
 
         // parei aqui montando o json
-        String jsonScriptFind = Going + Returns + GoingDate + ReturnsDate ;
+
         if(Going == null || Going.equals("") || Returns == null || Returns.equals("")
                 || GoingDate == null || GoingDate.equals("") || ReturnsDate == null
                 || ReturnsDate.equals("")){
             print("Obrigatório informar todos os campos");
         }else {
-
+            String jsonScriptFind = "origin=" + Going + "&destination=" +  Returns + "&goingDate=" + GoingDate + "&returnsDate=" + ReturnsDate;
             WebServiceEndereco webServiceEndereco = new WebServiceEndereco();
             webServiceEndereco.execute(jsonScriptFind);
         }
@@ -108,7 +113,7 @@ public class PlanActivity extends AppCompatActivity {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
             try {
-                URL url = new URL("https://accessible-tourism-api.herokuapp.com/v1" + strings[0] + "/json/");
+                URL url = new URL("https://accessible-tourism-api.herokuapp.com/v1/flights?" + strings[0]);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -142,22 +147,21 @@ public class PlanActivity extends AppCompatActivity {
 
         // MÉTODO QUE CONFIGURA A RESPOSTA DO MÉTODO HTTP
 
-        /*
         @Override
         protected void onPostExecute(String s) {
 
             if(s == null)
-                print("Não foi possível recuperar os dados...");
+                print("Não existem vôos disponíveis para as datas informadas...");
             else {
                 try {
 
                     JSONObject json = new JSONObject(s);
 
-                    edtLogradouro.setText(json.getString("logradouro"));
-                    edtComplemento.setText(json.getString("complemento"));
-                    edtBairro.setText(json.getString("bairro"));
-                    edtCidade.setText(json.getString("localidade"));
-                    edtUF.setText(json.getString("uf"));
+                    txtCia.setText(json.getString("company"));
+                    txtValor.setText(json.getString("value"));
+                    txtGoingTime.setText(json.getString("goingTime"));
+                    txtReturnsTime.setText(json.getString("returnsTime"));
+                    txtCurrency.setText(json.getString("currency"));
 
                     print("Endereço recuperado com sucesso!");
 
@@ -165,7 +169,7 @@ public class PlanActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }*/
+        }
     }
 
     public class WebAPI extends AsyncTask<String, Void, String>{
