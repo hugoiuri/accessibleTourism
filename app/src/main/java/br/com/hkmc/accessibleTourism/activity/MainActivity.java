@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import br.com.hkmc.accessibleTourism.R;
+
 //import in.goodiebag.carouselpicker.CarouselPicker;
 
 public class MainActivity extends AppCompatActivity {
