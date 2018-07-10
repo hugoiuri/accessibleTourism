@@ -109,19 +109,23 @@
         android:id="@+id/btnFindFlightId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginTop="168dp"
         android:background="@color/colorAccent"
         android:onClick="onClickFind"
         android:text="Buscar"
         android:textColor="#ffffff"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerViewId"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewId"
         android:layout_width="395dp"
-        android:layout_height="314dp"
+        android:layout_height="307dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"

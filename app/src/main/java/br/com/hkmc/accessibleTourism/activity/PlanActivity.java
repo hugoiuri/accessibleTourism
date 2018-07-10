@@ -1,5 +1,6 @@
 package br.com.hkmc.accessibleTourism.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -91,6 +93,11 @@ public class PlanActivity extends AppCompatActivity {
     // PROCEDIMENTO PARA EXECUTAR O ONCLICK DO BOTÃO
     public void onClickFind(View view){
 
+        View view1 = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
+        }
         String Going = edtGoing.getText().toString();
         String Returns = edtReturns.getText().toString();
         String GoingDate = edtGoingDate.getText().toString();
