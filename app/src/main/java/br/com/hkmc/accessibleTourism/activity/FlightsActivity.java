@@ -4,17 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.view.View;
 
 import br.com.hkmc.accessibleTourism.R;
 
-public class PlanActivity extends AppCompatActivity {
+public class FlightsActivity extends AppCompatActivity {
+
+    private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -23,14 +21,16 @@ public class PlanActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.mnHomeId:
-                    Intent homeIntent = new Intent(PlanActivity.this, MainActivity.class);
+                    Intent homeIntent = new Intent(FlightsActivity.this, MainActivity.class);
                     startActivity(homeIntent);
                     return true;
                 case R.id.mnProfileId:
-                    Intent profileIntent = new Intent(PlanActivity.this, ProfileActivity.class);
+                    Intent profileIntent = new Intent(FlightsActivity.this, ProfileActivity.class);
                     startActivity(profileIntent);
                     return true;
                 case R.id.mnPlanId:
+                    Intent planIntent = new Intent(FlightsActivity.this, PlanActivity.class);
+                    startActivity(planIntent);
                     return true;
             }
             return false;
@@ -40,10 +40,11 @@ public class PlanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plan);
+        setContentView(R.layout.activity_flights);
 
+        mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        navigation.setSelectedItemId(R.id.mnPlanId);
     }
+
 }

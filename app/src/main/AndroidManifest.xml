@@ -23,7 +23,10 @@
             android:label="@string/title_activity_profile" />
         <activity
             android:name=".activity.PlanActivity"
-            android:label="@string/title_activity_plan"></activity>
+            android:label="@string/title_activity_plan" />
+        <activity
+            android:name=".activity.FlightsActivity"
+            android:label="@string/title_activity_flights"></activity>
     </application>
 
 </manifest>

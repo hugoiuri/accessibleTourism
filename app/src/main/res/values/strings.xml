@@ -6,4 +6,7 @@
     <string name="title_menu_home">Início</string>
     <string name="title_menu_profile">Perfil</string>
     <string name="title_menu_plan">Planejar</string>
+    <string name="title_featured_packages">Pacotes em destaque</string>
+    <string name="title_top_packages">Pacotes mais comprados</string>
+    <string name="title_activity_flights">Resultados da Busca</string>
 </resources>
