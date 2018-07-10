@@ -7,13 +7,19 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.view.View;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,20 +29,23 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.hkmc.accessibleTourism.R;
+import br.com.hkmc.accessibleTourism.adapter.FlightAdapter;
+import br.com.hkmc.accessibleTourism.models.Flight;
+import br.com.hkmc.accessibleTourism.services.TokenService;
 
 public class PlanActivity extends AppCompatActivity {
+
+    private List<Flight> flightList = new ArrayList<>();
 
     private EditText edtGoing;
     private EditText edtReturns;
     private EditText edtGoingDate;
     private EditText edtReturnsDate;
-    private TextView txtCia;
-    private TextView txtValor;
-    private TextView txtReturnsTime;
-    private TextView txtGoingTime;
-    private TextView txtCurrency;
+    private RecyclerView recyclerView;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -76,11 +85,8 @@ public class PlanActivity extends AppCompatActivity {
         edtReturns = findViewById(R.id.edtReturnsId);
         edtGoingDate = findViewById(R.id.edtGoingDateId);
         edtReturnsDate = findViewById(R.id.edtReturnsDateId);
-        txtCia = findViewById(R.id.txtCiaId);
-        txtValor = findViewById(R.id.txtValorId);
-        txtGoingTime = findViewById(R.id.txtDepartureHourId);
-        txtReturnsTime = findViewById(R.id.txtArrivalHourId);
-        txtCurrency = findViewById(R.id.txtCurrencyId);
+
+        recyclerView = findViewById(R.id.recyclerViewId);
     }
     // PROCEDIMENTO PARA EXECUTAR O ONCLICK DO BOTÃO
     public void onClickFind(View view){
@@ -109,12 +115,19 @@ public class PlanActivity extends AppCompatActivity {
         // MÉTODO QUE FAZ A REQUISIÇÃO HTTP
         @Override
         protected String doInBackground(String... strings) {
-
+            String access_token = "";
+            try {
+                TokenService tokenService = new TokenService();
+                access_token = tokenService.getToken();
+            } catch (Exception e){
+                print("Erro ao buscar o token");
+            }
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
             try {
                 URL url = new URL("https://accessible-tourism-api.herokuapp.com/v1/flights?" + strings[0]);
                 urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestProperty ("Authorization", "JWT " + access_token);
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
 
@@ -149,44 +162,44 @@ public class PlanActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-
             if(s == null)
                 print("Não existem vôos disponíveis para as datas informadas...");
             else {
                 try {
+                    String data = "{\"flights\": " + s + "}";
+                    JSONObject json = new JSONObject(data);
+                    JSONArray jsonArray = json.getJSONArray("flights");
 
-                    JSONObject json = new JSONObject(s);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject obj = jsonArray.getJSONObject(i);
+                        Flight flight = new Flight();
 
-                    txtCia.setText(json.getString("company"));
-                    txtValor.setText(json.getString("value"));
-                    txtGoingTime.setText(json.getString("goingTime"));
-                    txtReturnsTime.setText(json.getString("returnsTime"));
-                    txtCurrency.setText(json.getString("currency"));
+                        flight.setOrigin(edtGoing.getText().toString());
+                        flight.setDestination(edtReturns.getText().toString());
+                        flight.setGoingDate(edtGoingDate.getText().toString());
+                        flight.setReturnsDate(edtReturnsDate.getText().toString());
 
-                    print("Endereço recuperado com sucesso!");
+                        flight.setCompany(obj.getString("company"));
+                        flight.setValue(obj.getString("value"));
+                        flight.setGoingTime(obj.getString("goingTime"));
+                        flight.setReturnsTime(obj.getString("returnsTime"));
+                        flight.setCurrency(obj.getString("currency"));
+                        flightList.add(flight);
+                    }
+
+                    FlightAdapter flightAdapter = new FlightAdapter(flightList);
+
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+                    recyclerView.setLayoutManager(layoutManager);
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(),
+                            LinearLayout.VERTICAL));
+                    recyclerView.setAdapter(flightAdapter);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-        }
-    }
-
-    public class WebAPI extends AsyncTask<String, Void, String>{
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
         }
     }
 }
