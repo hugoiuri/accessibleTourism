@@ -6,25 +6,19 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.view.View;
 import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,15 +27,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import br.com.hkmc.accessibleTourism.R;
 import br.com.hkmc.accessibleTourism.adapter.FlightAdapter;
 import br.com.hkmc.accessibleTourism.models.Flight;
 import br.com.hkmc.accessibleTourism.services.TokenService;
 
 public class PlanActivity extends AppCompatActivity {
-
-    private List<Flight> flightList = new ArrayList<>();
 
     private EditText edtGoing;
     private EditText edtReturns;
@@ -79,7 +70,7 @@ public class PlanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.mnPlanId);
 
@@ -90,7 +81,7 @@ public class PlanActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerViewId);
     }
-    // PROCEDIMENTO PARA EXECUTAR O ONCLICK DO BOTÃO
+
     public void onClickFind(View view){
 
         View view1 = this.getCurrentFocus();
@@ -103,23 +94,19 @@ public class PlanActivity extends AppCompatActivity {
         String GoingDate = edtGoingDate.getText().toString();
         String ReturnsDate = edtReturnsDate.getText().toString();
 
-        // parei aqui montando o json
-
         if(Going == null || Going.equals("") || Returns == null || Returns.equals("")
                 || GoingDate == null || GoingDate.equals("") || ReturnsDate == null
                 || ReturnsDate.equals("")){
             print("Obrigatório informar todos os campos");
         }else {
             String jsonScriptFind = "origin=" + Going + "&destination=" +  Returns + "&goingDate=" + GoingDate + "&returnsDate=" + ReturnsDate;
-            WebServiceEndereco webServiceEndereco = new WebServiceEndereco();
-            webServiceEndereco.execute(jsonScriptFind);
+            WebServiceFlight webServiceFlight = new WebServiceFlight();
+            webServiceFlight.execute(jsonScriptFind);
         }
     }
 
-    // CLASSE PARA EXECUTA AsyncTask
-    public class WebServiceEndereco extends AsyncTask<String, Void, String> {
+    public class WebServiceFlight extends AsyncTask<String, Void, String> {
 
-        // MÉTODO QUE FAZ A REQUISIÇÃO HTTP
         @Override
         protected String doInBackground(String... strings) {
             String access_token = "";
@@ -165,14 +152,14 @@ public class PlanActivity extends AppCompatActivity {
             return null;
         }
 
-        // MÉTODO QUE CONFIGURA A RESPOSTA DO MÉTODO HTTP
-
         @Override
         protected void onPostExecute(String s) {
             if(s == null)
                 print("Não existem vôos disponíveis para as datas informadas...");
             else {
                 try {
+
+                    List<Flight> flightList = new ArrayList<>();
                     String data = "{\"flights\": " + s + "}";
                     JSONObject json = new JSONObject(data);
                     JSONArray jsonArray = json.getJSONArray("flights");
@@ -201,6 +188,7 @@ public class PlanActivity extends AppCompatActivity {
                     recyclerView.setHasFixedSize(true);
                     recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(),
                             LinearLayout.VERTICAL));
+
                     recyclerView.setAdapter(flightAdapter);
 
                 } catch (JSONException e) {

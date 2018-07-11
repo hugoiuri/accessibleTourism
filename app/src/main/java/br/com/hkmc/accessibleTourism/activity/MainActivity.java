@@ -12,15 +12,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import br.com.hkmc.accessibleTourism.R;
-
-//import in.goodiebag.carouselpicker.CarouselPicker;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         navigation.setSelectedItemId(R.id.mnHomeId);
         ViewPager mViewPager = findViewById(R.id.pager);
 
-// Aqui estao suas imagens dentro do drawable
         int[] mResources = {
                 R.drawable.first,
                 R.drawable.second,
@@ -66,12 +59,9 @@ public class MainActivity extends AppCompatActivity {
         };
 
         CustomPagerAdapter mCustomPagerAdapter = new CustomPagerAdapter(this, mResources);
-
         mViewPager.setAdapter(mCustomPagerAdapter);
-
         ViewPager mViewPager1 = findViewById(R.id.pager1);
 
-// Aqui estao as imagens dentro do drawable
         int[] mResources1 = {
                 R.drawable.first,
                 R.drawable.second,
@@ -82,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         };
 
         CustomPagerAdapter mCustomPagerAdapter1 = new CustomPagerAdapter(this, mResources1);
-
         mViewPager1.setAdapter(mCustomPagerAdapter1);
 
     }
@@ -107,18 +96,16 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return view == ((LinearLayout) object);
+            return view == (object);
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            View itemView = mLayoutInflater.inflate(R.layout.featured_packages, container, false);
 
+            View itemView = mLayoutInflater.inflate(R.layout.featured_packages, container, false);
             ImageView imageView = itemView.findViewById(R.id.imageView);
             imageView.setImageResource(mResources[position]);
-
             container.addView(itemView);
-
             return itemView;
         }
 
