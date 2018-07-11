@@ -63,12 +63,12 @@ public class MainActivity extends AppCompatActivity {
         ViewPager mViewPager1 = findViewById(R.id.pager1);
 
         int[] mResources1 = {
-                R.drawable.first,
-                R.drawable.second,
-                R.drawable.third,
-                R.drawable.fourth,
+                R.drawable.sixth,
                 R.drawable.fifth,
-                R.drawable.sixth
+                R.drawable.fourth,
+                R.drawable.third,
+                R.drawable.second,
+                R.drawable.first
         };
 
         CustomPagerAdapter mCustomPagerAdapter1 = new CustomPagerAdapter(this, mResources1);
